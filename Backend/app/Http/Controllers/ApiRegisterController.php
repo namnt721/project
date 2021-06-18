@@ -8,6 +8,7 @@ use App\Http\Requests\ApiLoginRequest;
 use App\Models\User;
 use Auth;
 use Hash;
+use Illuminate\Support\Facades\Log;
 
 class ApiRegisterController extends Controller
 {
@@ -27,7 +28,8 @@ class ApiRegisterController extends Controller
             'password' => Hash::make($request->password),
             'name' => $request->name,
             'phone' => $request->phone,
-        ]);
+            'role_id' => $request->role_id
+       ]);
 
         try{
             return response()->json([

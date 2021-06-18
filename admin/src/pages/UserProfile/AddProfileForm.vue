@@ -17,12 +17,23 @@
               </div>
               <div class="md-layout-item md-small-size-100 md-size-100">
                 <md-field>
-                  <label>Email <span class="error">(*)</span><span class="error" v-if="errors.email"> {{ errors.email[0] }}</span></label>
-                  <md-input v-model="user.email" class="is-invalid" type="email"></md-input>
-
+                  <label>Chức năng <span class="error">(*)</span><span class="error" v-if="errors.role_id"> {{ errors.role_id[0] }}</span></label>
+                  <md-select v-model="user.role_id">
+                    <md-option v-for="role in roles"
+                               :key="role.id"
+                               :value="role.id"
+                    >
+                      {{ role.name }}
+                    </md-option>
+                  </md-select>
                 </md-field>
               </div>
-
+              <div class="md-layout-item md-small-size-100 md-size-100">
+                <md-field>
+                  <label>Email <span class="error">(*)</span><span class="error" v-if="errors.email"> {{ errors.email[0] }}</span></label>
+                  <md-input v-model="user.email" class="is-invalid" type="email"></md-input>
+                </md-field>
+              </div>
               <div class="md-layout-item md-small-size-100 md-size-100">
                 <md-field>
                   <label>Số điện thoại <span class="error">(*)</span><span class="error" v-if="errors.phone"> {{ errors.phone[0] }}</span></label>
@@ -35,8 +46,6 @@
                   <md-input v-model="user.password" type="password"></md-input>
                 </md-field>
               </div>
-
-
               <div class="md-layout-item md-size-100 text-right">
                 <md-button class="md-raised md-success" type="submit">Thêm mới</md-button>
               </div>
@@ -64,14 +73,26 @@ export default {
         email: null,
         phone: null,
         password: null,
+        role_id: null
       },
+      roles: '',
       errors: {}
     };
   },
+  mounted(){
+    this.getRole()
+  },
   methods:{
+    getRole(){
+      axios.get(baseUrl + '/api/user/create')
+      .then(response =>{
+        this.roles = response.data
+      })
+    },
     addUser: function (){
       axios.post(baseUrl + '/api/user/register', this.user)
           .then(response => {
+            console.log(response.data)
             if(response.data.code === 200){
               this.$router.push({name:'user'});
               Swal.fire({

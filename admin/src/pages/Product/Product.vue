@@ -67,7 +67,7 @@ export default {
     deleteProduct(id){
       Swal.fire({
         title: 'Bạn chắc chắn chứ',
-        text: "Bạn có muốn sản phẩm này không?",
+        text: "Bạn có muốn xoá sản phẩm này không?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#28a745',
@@ -78,7 +78,6 @@ export default {
         if (result.isConfirmed) {
           axios.get(baseUrl + '/api/product/delete/' + id)
               .then(response => {
-                console.log(response.data.code)
                 if(response.data.code === 200){
                   for (let i = 0; i < this.products.length; i++) {
                     if (id === this.products[i].id) {
@@ -87,7 +86,7 @@ export default {
                   }
                   Swal.fire({
                     icon: 'success',
-                    title: 'Xoá tài khoản thành công',
+                    title: 'Xoá sản phẩm thành công',
                     showConfirmButton: false,
                     timer: 1500
                   })
@@ -96,7 +95,7 @@ export default {
               .catch(error =>{
                 Swal.fire({
                   icon: 'error',
-                  title: 'Xoá tài thất bại',
+                  title: 'Xoá sản phẩm thất bại',
                   showConfirmButton: false,
                   timer: 1500
                 })

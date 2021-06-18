@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Traits\DeleteModelTrait;
 use Illuminate\Http\Request;
+use App\Http\Requests\ApiProductRequest;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
 
 class ApiProductController extends Controller
 {
@@ -33,13 +34,12 @@ class ApiProductController extends Controller
         return response()->json($category);
     }
 
-    public function store(Request $request)
+    public function store(ApiProductRequest $request)
     {
-
         $dataProduct = [
             'name' => $request->name,
             'category_id' => $request->category_id,
-            'user_id' => 1,
+            'user_id' => $request->id,
             'quantity' => $request->quantity,
             'price' => $request->price
         ];
@@ -48,7 +48,7 @@ class ApiProductController extends Controller
             $file = $request->file;
             $fileNameOrigin = $file->getClientOriginalName();
             $fileNameHash = Str::random(10).'.'.$file->getClientOriginalExtension();
-            $file_path = $request->file('file')->storeAs('public/product/1', $fileNameHash);
+            $file_path = $request->file('file')->storeAs('public/product/' . $request->id, $fileNameHash);
 
             $dataUploadImage = [
                 'file_name' => $fileNameOrigin,

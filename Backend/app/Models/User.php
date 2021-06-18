@@ -22,7 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone'
+        'phone',
+        'role_id'
     ];
 
     /**
@@ -43,4 +44,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function checkPermissionAccess($permissionCheck)
+    {
+        return true;
+        //Lấy quyền của user đang login
+        //So sánh giá trị đưa vào của route hiện tại xem có tồn tại trong các quyền lấy được hay không
+//        $roles = auth()->user()->roles;
+//        foreach ($roles as $role) {
+//            $permissions = $role->permissions;
+//            if($permissions->contains('key_code', $permissionCheck)){
+//                return true;
+//            }
+//            return false;
+//        }
+    }
+
 }

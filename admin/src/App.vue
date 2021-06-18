@@ -3,7 +3,11 @@
 </template>
 
 <script>
-export default {};
+
+
+export default {
+
+};
 </script>
 <style>
 @import "https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css";

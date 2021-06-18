@@ -17,10 +17,20 @@ class ApiLoginController extends Controller
             'password' => $request->password
         ])){
             $user = User::where('email', $request->email)->first();
-            $user->token = $user->createToken('Token Name')->accessToken;
+            $user->token = $user->createToken('token')->accessToken;
             return response()->json($user);
         }else{
             return response()->json('Bạn nhập sai tên đăng nhập hoặc mật khẩu', 401);
         }
+    }
+
+    public function checkLogin()
+    {
+    }
+
+    public function getInfoUser()
+    {
+        $user = auth('api')->user()->id;
+        return response()->json($user);
     }
 }

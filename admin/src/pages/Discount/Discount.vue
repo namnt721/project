@@ -1,23 +1,29 @@
 <template>
   <div class="content">
+    <!--    <FormCategory></FormCategory>-->
     <div class="row" :class="{'display-none' : false}">
       <div class="col-md-12" >
-        <router-link :to="{ name: 'createCategory'}" class="btn btn-success float-right">Thêm mới</router-link>
+        <router-link :to="{ name: 'createDiscount'}" class="btn btn-success float-right">Thêm mới</router-link>
       </div>
       <div class="col-md-12" style="padding-top:20px;">
         <table class="table table-striped">
           <thead class="table-dark">
-            <tr>
-              <th width="50">#</th>
-              <th>Tên danh mục</th>
-              <th width="150">Chức năng</th>
-
-            </tr>
+          <tr>
+            <th width="50">#</th>
+            <th>Mã voucher</th>
+            <th>%</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày hết hạn</th>
+            <th width="150">Chức năng</th>
+          </tr>
           </thead>
           <tbody>
 
           <tr v-for="category in categories" :key="category.id">
             <td>{{ category.id }}</td>
+            <td>{{ category.name }}</td>
+            <td>{{ category.name }}</td>
+            <td>{{ category.name }}</td>
             <td>{{ category.name }}</td>
             <td>
               <router-link :to="{name: 'updateCategory', params: { id: category.id }}" class="btn btn-success" style="margin-right:5px">Sửa</router-link>
@@ -54,8 +60,8 @@ export default {
     getCategory(){
       axios.get(baseUrl + '/api/category')
           .then(response => {
-             response.data.forEach((value) => {
-               this.categories.push(value);
+            response.data.forEach((value) => {
+              this.categories.push(value);
             });
           })
           .catch(error => {

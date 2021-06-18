@@ -18,7 +18,7 @@
               </div>
               <div class="md-layout-item md-small-size-100 md-size-100">
                 <md-field>
-                  <label>Danh mục sản phẩm <span class="error">(*)</span><span class="error" v-if="errors.category"> {{ errors.category[0] }}</span></label>
+                  <label>Danh mục sản phẩm <span class="error">(*)</span><span class="error" v-if="errors.category_id"> {{ errors.category_id[0] }}</span></label>
                   <md-select v-model="product.category_id" >
                     <md-option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</md-option>
                   </md-select>
@@ -72,27 +72,32 @@ export default {
         category_id: null,
         feature_image_path: '',
         quantity: null,
-        price: null
+        price: null,
+        id: null
       },
       categories: [],
       errors: {}
     };
   },
   mounted(){
+    this.getInfoUser()
     this.getCategory()
   },
   methods:{
+    getInfoUser(){
+      const token = window.localStorage.getItem('token')
+      axios.get(baseUrl + '/api/user-info', {headers: {Authorization : 'Bearer ' + token}})
+          .then(response => {
+              this.product.id = response.data
+          })
+    },
     getCategory(){
       axios.get(baseUrl + '/api/product/create')
           .then(response => {
             response.data.forEach((value) => {
               this.categories.push(value);
             });
-          })
-          .catch(error => {
-            if(error.response.data.errors){
-              this.errors = error.response.data.errors;
-            }
+            console.log(this.categories)
           })
     },
     onFileChange(e) {
@@ -105,35 +110,44 @@ export default {
       document.getElementById("output").style.display = 'block'
       this.product.feature_image_path = e.target.files[0]
     },
-    addProduct: function (){
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const formData = new FormData();
-      ['name', 'category_id','quantity', 'price'].forEach(file => {
-        formData.append(file, this.product[file]);
-      })
-      formData.append('file', this.product.feature_image_path);
 
-      axios.post(baseUrl + '/api/product/store', formData, config)
-          .then(response => {
-            if(response.data.code === 200){
+    addProduct: function (){
+      if(this.product.name == null || this.product.category_id == null || this.product.quantity == null || this.product.price == null){
+        axios.post(baseUrl + '/api/product/store', this.product)
+            .catch(error =>{
+              if(error.response.data.errors){
+                this.errors = error.response.data.errors;
+              }
+            });
+      }else{
+        const formData = new FormData();
+        formData.append('file', this.product.feature_image_path);
+        ['name', 'category_id','quantity', 'price', 'id'].forEach(file => {
+          formData.append(file, this.product[file]);
+        })
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+        axios.post(baseUrl + '/api/product/store', formData, config)
+            .then(response => {
+              if(response.data.code === 200){
                 this.$router.push({name:'product'});
                 Swal.fire({
-                icon: 'success',
-                title: 'Thêm mới sản phẩm thành công',
-                showConfirmButton: false,
-                timer: 1500
-              })
-            }
-          })
-          .catch(error =>{
-            if(error.response.data.errors){
-              this.errors = error.response.data.errors;
-            }
-          });
+                  icon: 'success',
+                  title: 'Thêm mới sản phẩm thành công',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
+              }
+            })
+            .catch(error =>{
+              if(error.response.data.errors){
+                this.errors = error.response.data.errors;
+              }
+            });
+      }
     }
   }
 };

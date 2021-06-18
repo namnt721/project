@@ -51,12 +51,24 @@ export default{
       }
     }
   },
+  // mounted(){
+  //   this.checkLoggin()
+  // },
   methods:{
+    // checkLoggin(){
+    //   const token = window.localStorage.getItem('token')
+    //   axios.get(baseUrl + '/api/check-login', {headers: {Authorization : 'Bearer ' + token}})
+    //       .then(response => {
+    //         console.log(response.data);
+    //       })
+    //       .catch(error => {
+    //       });
+    // },
     login(){
-      axios.post(baseUrl + '/api/login', this.user)
+      axios.post(baseUrl + '/api/login/', this.user)
           .then(response => {
             window.localStorage.setItem('token', response.data.token);
-            // this.$router.push({name:'dashboard'});
+            this.$router.push({name:'home'});
           })
           .catch( error => {
             console.log(error);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Traits\DeleteModelTrait;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
 
 class ApiCategoryController extends Controller
 {

@@ -18,6 +18,19 @@
               </div>
               <div class="md-layout-item md-small-size-100 md-size-100">
                 <md-field>
+                  <label>Chức năng <span class="error">(*)</span><span class="error" v-if="errors.role_id"> {{ errors.role_id[0] }}</span></label>
+                  <md-select v-model="user.role_id">
+                    <md-option v-for="role in roles"
+                               :key="role.id"
+                               :value="role.id"
+                    >
+                      {{ role.name }}
+                    </md-option>
+                  </md-select>
+                </md-field>
+              </div>
+              <div class="md-layout-item md-small-size-100 md-size-100">
+                <md-field>
                   <label>Email <span class="error">(*)</span><span class="error" v-if="errors.email"> {{ errors.email[0] }}</span></label>
                   <md-input v-model="user.email" class="is-invalid" type="email" disabled></md-input>
 
@@ -61,15 +74,23 @@ export default {
         name: '',
         email: '',
         phone: '',
+        role_id: ''
       },
+      roles: '',
       errors: {}
     };
   },
   mounted(){
     this.getUser()
+    this.getRole()
   },
   methods:{
-
+    getRole(){
+      axios.get(baseUrl + '/api/user/create')
+          .then(response =>{
+            this.roles = response.data
+          })
+    },
    getUser(){
      const url = this.$router.history.current.path
      axios.get(baseUrl + '/api' + url)
@@ -77,6 +98,7 @@ export default {
            this.user.name = response.data.name;
            this.user.email = response.data.email;
            this.user.phone = response.data.phone;
+           this.user.role_id = response.data.role_id;
          })
          .catch(error => {
            console.log(error);

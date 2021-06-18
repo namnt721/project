@@ -29,7 +29,7 @@ class ApiRegisterRequest extends FormRequest
             'password' => 'required',
             'name' => 'required',
             'phone' => 'required|numeric|unique:users',
-
+            'role_id' => 'required',
         ];
 
 
@@ -45,6 +45,8 @@ class ApiRegisterRequest extends FormRequest
             'phone.required' => 'Số điện thoại không được phép để trống!',
             'phone.numeric' => 'Số điện thoại sai định dạng!',
             'phone.unique' => 'Số điện thoại đã tồn tại!',
+            'role_id.required' => 'Chức năng không được phép để trống!',
+
 
         ];
     }

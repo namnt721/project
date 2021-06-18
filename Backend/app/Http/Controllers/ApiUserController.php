@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Traits\DeleteModelTrait;
+use Illuminate\Support\Facades\Log;
 
 class ApiUserController extends Controller
 {
@@ -24,6 +26,12 @@ class ApiUserController extends Controller
         return response()->json($user);
     }
 
+    public function create()
+    {
+        $role = Role::get();
+        return response()->json($role);
+    }
+
     public function edit($id)
     {
         $user = $this->user->find($id);
@@ -35,6 +43,7 @@ class ApiUserController extends Controller
         $this->user->find($id)->update([
             'name' => $request->name,
             'phone' => $request->phone,
+            'role_id' => $request->role_id
         ]);
 
         try{
